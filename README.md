@@ -1,106 +1,50 @@
-# 📚 StudyOS
+# StudyOS
 
-> Plataforma acadêmica de organização, acompanhamento e análise de estudos.
+Painel local de estudos com questões, provas, redações, aulas, Pomodoro e guia adaptativo.
 
-O **StudyOS** é um projeto desenvolvido como **trabalho de faculdade**, com foco na construção de uma aplicação moderna para ajudar estudantes a organizar rotina, metas, questões, desempenho, hábitos e progresso de estudos em um só lugar.
+## Executar
 
-## 🎯 Objetivo
+No Windows, dê dois cliques em `iniciar.bat` ou execute:
 
-Criar uma experiência centralizada e visual para acompanhamento de estudos, permitindo ao usuário enxergar sua evolução, identificar dificuldades e organizar melhor sua rotina acadêmica.
-
-## ✨ Principais recursos
-
-- 📊 Dashboard de desempenho e progresso
-- ✅ Acompanhamento de questões, acertos e erros
-- 🎯 Metas de estudo
-- 📅 Organização da rotina
-- 📈 Relatórios e estatísticas
-- 🧠 Acompanhamento de tópicos dominados e pendentes
-- 🔔 Área de notificações e preferências
-- 🌙 Interface responsiva com suporte a temas
-- 🗃️ Estrutura preparada para persistência de dados com Drizzle/D1
-
-## 🛠️ Tecnologias
-
-- **TypeScript**
-- **React 19**
-- **vinext / Vite**
-- **Tailwind CSS**
-- **Drizzle ORM**
-- **Cloudflare D1** (estrutura opcional)
-- **Node.js 22+**
-
-## 📁 Estrutura do projeto
-
-```text
-StudyOS/
-├── app/           # Interface, páginas, estilos e componentes
-├── db/            # Configuração e schema do banco de dados
-├── drizzle/       # Metadados/migrações do Drizzle
-├── examples/      # Exemplos auxiliares
-├── public/        # Ícones e arquivos estáticos
-├── scripts/       # Scripts de auditoria e manutenção
-├── tests/         # Testes automatizados
-└── worker/        # Código relacionado ao runtime/worker
+```powershell
+python server.py
 ```
 
-## 🚀 Como executar
+Abra http://localhost:8080. Os dados ficam somente no computador, em `data/studyos.json`.
 
-### Pré-requisitos
+## Publicar no GitHub
 
-- Node.js `>= 22.13.0`
-- npm ou pnpm
+Este pacote já está pronto para virar um repositório. O arquivo `data/studyos.json` fica fora do Git para não publicar dados pessoais ou foto de perfil. Na primeira abertura, o StudyOS cria automaticamente uma base inicial local; `data/studyos.example.json` serve apenas como referência de estrutura.
 
-### Instalação
+## Importação de matérias por JSON
 
-```bash
-git clone https://github.com/danielcdesk/StudyOS.git
-cd StudyOS
-npm install
-npm run dev
+Em **Configurações → Estrutura de matérias**, o StudyOS aceita o arquivo gerado por um analisador de edital. O formato recomendado para integração é:
+
+```json
+{
+  "versao": "1.0",
+  "categorias": [
+    {
+      "nome": "Conhecimentos Básicos",
+      "materias": [
+        {
+          "nome": "Língua Portuguesa",
+          "assuntos": ["Interpretação de textos", "Gramática"]
+        }
+      ]
+    }
+  ]
+}
 ```
 
-Para gerar uma build de produção:
+Também são aceitos os nomes em inglês (`categories`, `subjects`, `topics`), uma lista plana de `materias` com o campo `categoria` e o formato nativo do StudyOS (`knowledgeAreas` e `subjects`). Nomes repetidos são unidos sem diferenciar maiúsculas, acentos ou espaços extras. Antes de importar, o usuário escolhe a prova de destino. Se ela já tiver matérias próprias, o StudyOS pede confirmação e substitui somente a estrutura vinculada àquela prova; matérias de outras provas, conteúdos comuns e históricos de questões, provas, aulas e redações são preservados. Antes da troca, o StudyOS mantém uma cópia local da estrutura anterior e de seus vínculos.
 
-```bash
-npm run build
-```
+O contrato formal para validação no site que analisa o edital está em `public/studyos-taxonomy.schema.json`. Campos extras são permitidos, portanto o analisador pode manter metadados próprios sem impedir a importação.
 
-Para executar os testes:
+Na mesma tela, as setas de cada matéria alteram sua posição dentro da categoria. A ação **Mover** transfere a matéria e todos os seus assuntos para outra categoria, preservando os registros históricos vinculados.
 
-```bash
-npm test
-```
+O botão **Provas** de cada matéria e o ícone de prova de cada assunto permitem vinculá-los a um ou mais tipos de prova cadastrados pelo usuário. Sem vínculos, o conteúdo fica disponível para todas as provas. No cadastro de provas e simulados, a lista de matérias respeita automaticamente o tipo selecionado.
 
-## 🔐 Segurança
+A estrutura também possui uma navegação por prova. **Todas as provas** exibe a árvore completa; cada prova cadastrada abre sua própria visão com apenas as matérias gerais ou vinculadas a ela, ainda separadas pelas categorias principais. A última visão escolhida é lembrada neste computador.
 
-O projeto inclui um script de auditoria de segurança e não deve armazenar chaves, senhas ou tokens diretamente no código-fonte.
-
-```bash
-npm run audit:security
-```
-
-
-## 🤖 Transparência sobre uso de Inteligência Artificial
-
-Este projeto foi desenvolvido com **uso substancial de ferramentas de Inteligência Artificial durante o processo de criação**. A IA foi utilizada como apoio em atividades como estruturação do projeto, geração e revisão de código, organização de funcionalidades, documentação, ajustes de interface e resolução de problemas técnicos.
-
-O trabalho também contou com **direcionamento, decisões, testes e revisão humana**, especialmente na definição da proposta do StudyOS, requisitos, funcionalidades desejadas e validação das versões produzidas.
-
-> **Declaração de transparência:** este repositório não busca apresentar o código como tendo sido produzido exclusivamente de forma manual. O uso de IA faz parte do processo de desenvolvimento deste trabalho acadêmico.
-
-## 🎓 Contexto acadêmico
-
-Este repositório faz parte de um **trabalho de faculdade na área de Sistemas de Informação**, sendo utilizado para praticar desenvolvimento web, organização de projeto, versionamento com Git/GitHub, boas práticas de código e evolução de produto.
-
-## 📌 Status
-
-🚧 **Em desenvolvimento** — novas funcionalidades e melhorias podem ser adicionadas conforme a evolução do projeto acadêmico.
-
-## 👨‍💻 Autor
-
-Desenvolvido por **Daniel Cirilo de Souza** como parte de atividades e estudos acadêmicos.
-
----
-
-⭐ Se este projeto ajudar como referência de estudo, considere marcar o repositório com uma estrela.
+Para encerrar com segurança, dê dois cliques em `encerrar.bat` ou pressione `Ctrl+C` no terminal do servidor.

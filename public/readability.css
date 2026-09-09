@@ -1,0 +1,45 @@
+/* Final readability layer — keeps dense dashboards legible without losing hierarchy. */
+:root{--ui-caption:10px;--ui-meta:11px;--ui-body-sm:11.5px;--ui-body:12px}
+
+/* Final interaction pass: consistent keyboard focus, touch response and stable numbers. */
+:where(button,a,input,select,textarea,summary,[role="button"]):focus-visible{outline:2px solid var(--purple)!important;outline-offset:2px!important}
+:where(button,a,summary,label[for],select){touch-action:manipulation;-webkit-tap-highlight-color:color-mix(in srgb,var(--purple) 15%,transparent)}
+:where(h1,h2,h3,h4){text-wrap:balance;scroll-margin-top:24px}:where(p,.head-copy){text-wrap:pretty}
+:where(.metric,.overview-kpi,.workspace-kpis,.qb-kpis,.timer-time,table){font-variant-numeric:tabular-nums}
+
+/* Shared interface text */
+#app .card-head h2,#app .card-head h3{font-size:15px!important;line-height:1.35!important}
+#app .head-copy{font-size:var(--ui-meta)!important;line-height:1.5!important}
+#app .badge{font-size:10px!important}
+#app table{font-size:12px!important}
+#app th{font-size:10px!important}
+#app .field label{font-size:10.5px!important}
+
+/* Dashboard: hierarchy and decision cards */
+.overview-overline{font-size:10px!important}.overview-command-reason{font-size:11px!important;line-height:1.55!important}.overview-link{font-size:11px!important}
+.overview-kpi{min-height:112px!important;padding:17px!important}.overview-kpi>div:last-child>span{font-size:9.5px!important;line-height:1.3}.overview-kpi>div:last-child>small{font-size:10.5px!important;line-height:1.4}.overview-kpi>div:last-child>strong small{font-size:11px!important}
+.overview-section-head p{font-size:11.5px!important;line-height:1.45}.overview-section-head .semantic-legend,.semantic-legend{font-size:10.5px!important}
+.overview-count{min-width:32px!important;height:28px!important;font-size:10px!important}.overview-count.danger{background:var(--product-danger-soft)!important;color:var(--product-danger)!important}.overview-count.warning{background:var(--product-warning-soft)!important;color:var(--product-warning)!important}
+.overview-priority-list{gap:8px!important}.overview-priority-list>button{grid-template-columns:30px minmax(0,1fr) 50px!important;min-height:68px!important;padding:10px 11px!important;gap:10px!important}.overview-rank{width:28px!important;height:28px!important;font-size:10px!important}.overview-priority-name strong{display:-webkit-box!important;overflow:hidden;white-space:normal!important;-webkit-box-orient:vertical;-webkit-line-clamp:2;font-size:11.5px!important;line-height:1.3}.overview-priority-name small{margin-top:3px!important;font-size:9.5px!important;line-height:1.4}.overview-priority-list>button>b{display:inline-flex;align-items:center;justify-content:center;min-width:46px;min-height:27px;padding:4px 7px;border-radius:7px;font-size:11px!important;background:var(--product-surface)!important}.overview-priority-list>button>b.danger{color:var(--product-danger)!important;background:var(--product-danger-soft)!important}.overview-priority-list>button>b.warning{color:#b7791f!important;background:var(--product-warning-soft)!important}.overview-card-link{font-size:11px!important;min-height:38px}.overview-success-empty strong{font-size:12px!important}.overview-success-empty small{font-size:10.5px!important}
+.overview-awaiting-data>span{background:color-mix(in srgb,var(--purple) 9%,var(--product-surface))!important;color:var(--purple)!important}
+.overview-chart-note{font-size:10.5px!important;line-height:1.5!important}.overview-empty-chart p,.overview-empty-chart button{font-size:11px!important}.overview-action-note p{font-size:10.5px!important;line-height:1.55!important}
+.overview-day-column span{font-size:8px!important}.overview-month-stats strong{font-size:17px!important}.overview-month-stats span{font-size:10px!important}.overview-writing .card-head button{font-size:10.5px!important}.overview-writing-score>span{font-size:10px!important}.overview-writing-score small{font-size:11px!important}.overview-writing-meta span{font-size:10px!important}.overview-writing>p{font-size:10.5px!important;line-height:1.55!important}.overview-achievement-card>div:nth-child(2)>span{font-size:9.5px!important}.overview-achievement-card h3{font-size:13px!important}.overview-achievement-card p{font-size:10.5px!important}
+.overview-evolution .evolution-chart text{font-size:9.5px!important}.overview-evolution .evolution-labels span{font-size:9.5px!important}.overview-evolution .chart-legend,.overview-exams .chart-legend{font-size:10.5px!important}
+.overview-confidence .confidence-list>div{font-size:11px!important}.overview-confidence .confidence-list small{font-size:10px!important}.overview-enemies .enemy-list>div>div:first-child{font-size:11px!important}.overview-enemies .enemy-tip{font-size:10.5px!important}
+
+/* GitHub-style consistency calendar */
+.github-toolbar>div>span{font-size:12px!important}.github-toolbar small,.github-toolbar>label>span{font-size:10px!important}.gh-month{font-size:9px!important}.gh-weekday{font-size:9px!important}.github-footer{font-size:10px!important}
+
+/* Lessons and exam workspaces */
+.workspace-kpis small{font-size:9.5px!important}.workspace-kpis p{font-size:10.5px!important}.workspace-card-heading p,.workspace-form-footer p{font-size:11px!important}.workspace-progress small{font-size:10px!important}.next-lesson>span{font-size:10px!important}.next-lesson p,.next-lesson strong{font-size:11px!important}
+.lesson-date small,.lesson-copy small,.lesson-duration{font-size:10px!important}.lesson-copy strong{font-size:12px!important}.workspace-status{font-size:9.5px!important}
+.exam-live-preview small{font-size:9.5px!important}.latest-exam-score>span,.latest-exam-score>small,.latest-exam-score>p{font-size:10px!important}.exam-result-top time,.exam-type-chip,.exam-result-title p,.exam-result-bars span,.exam-result-footer,.exam-result-card summary,.exam-score-tags span{font-size:10px!important}.exam-result-title h3{font-size:13px!important}
+
+/* Study guide, essays and the question workspace */
+.guide-page .eyebrow-chip,.guide-overline{font-size:10px!important}.guide-kpis span,.guide-kpis small,.guide-week-progress span,.guide-week-progress small{font-size:10px!important}.guide-page .plan-copy small,.guide-page .plan-score small,.guide-page .signal-list small{font-size:10px!important;line-height:1.4}.guide-page .plan-copy b,.guide-page .signal-list b{font-size:11.5px!important}
+.essay-eyebrow,.essay-kpi>span{font-size:10px!important}.essay-kpi small,.essay-form-divider small,.essay-competence-copy small,.essay-competence-bar small,.essay-competence-tip p,.essay-history-date small{font-size:10px!important}.essay-live-ring small,.essay-history-insights span,.essay-history-score span,.essay-history-score small,.essay-score-strip span,.essay-score-strip strong{font-size:9.5px!important}
+.qb-shell small{font-size:10px!important;line-height:1.4}.qb-shell p{font-size:11px;line-height:1.5}.qb-eyebrow{font-size:10px!important}.qb-kpis small,.qb-analysis-kpis small,.qb-error-summary small,.qb-subject-overview small{font-size:9.5px!important}.qb-kpis p,.qb-error-summary p,.qb-subject-overview p{font-size:10px!important}.qb-priority-subject,.qb-priority p,.qb-method p,.qb-cutoff>span,.qb-cutoff>strong,.qb-cutoff small{font-size:10px!important}.qb-ranking-name b,.qb-error-title>strong,.qb-subject-top h4{font-size:11px!important}.qb-error-signals,.qb-error-progress>span,.qb-review-method li span,.qb-review-method>p,.qb-subject-meta,.qb-subject-progress>span,.qb-subject-focus span,.qb-subject-focus em{font-size:9.5px!important}.qb-review-method li b,.qb-subject-focus b,.qb-subject-card>button{font-size:10.5px!important}
+
+@media(max-width:760px){
+  #eyebrow{font-size:9px!important}.overview-priority-list>button{grid-template-columns:28px minmax(0,1fr) 47px!important}.overview-priority-name strong{font-size:11px!important}.overview-priority-name small{font-size:9.5px!important}.workspace-kpis small{font-size:9.5px!important}.workspace-kpis p,.workspace-card-heading p,.workspace-form-footer p{font-size:10.5px!important}
+}

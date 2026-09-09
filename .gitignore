@@ -1,0 +1,16 @@
+# Dados criados no computador de cada pessoa usuária.
+data/studyos.json
+
+# Arquivos temporários do Python.
+__pycache__/
+*.py[cod]
+
+# Arquivos do sistema e de editores.
+.DS_Store
+Thumbs.db
+.vscode/
+
+# Artefatos e configurações locais de trabalho/publicação.
+work/
+outputs/
+.openai/

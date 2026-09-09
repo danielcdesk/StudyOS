@@ -1,0 +1,97 @@
+/* StudyOS dynamic UI — Coolicons, richer data visualization and restrained motion. */
+:root{
+ --chart-ease:cubic-bezier(.16,.8,.25,1);
+ --surface-glow:color-mix(in srgb,var(--purple) 9%,transparent);
+ --surface-glow-strong:color-mix(in srgb,var(--purple) 16%,transparent);
+}
+body:before{
+ content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+ background:
+  radial-gradient(circle at 78% 8%,color-mix(in srgb,var(--purple) 7%,transparent),transparent 26rem),
+  radial-gradient(circle at 24% 92%,color-mix(in srgb,var(--success) 5%,transparent),transparent 25rem);
+}
+.ui-icon.coolicon{
+ display:inline-block;flex:0 0 auto;width:19px;height:19px;background:currentColor;
+ -webkit-mask:var(--coolicon) center/contain no-repeat;mask:var(--coolicon) center/contain no-repeat;
+ transition:transform .22s var(--chart-ease),background-color .22s ease;
+}
+nav .coolicon,.settings-link .coolicon{width:19px;height:19px;opacity:.88}
+.icon-btn .coolicon{width:20px;height:20px}.row-actions .coolicon,.tree-toggle .coolicon{width:15px;height:15px}
+.primary,.secondary,button.danger{display:inline-flex;align-items:center;justify-content:center;gap:8px;position:relative;overflow:hidden}
+.primary .coolicon,.secondary .coolicon{width:16px;height:16px}
+.card-head h2,.card-head h3{display:flex;align-items:center;gap:8px}
+.card-head h2>.coolicon,.card-head h3>.coolicon{width:17px;height:17px;color:var(--purple);opacity:.92}
+
+.sidebar{box-shadow:8px 0 34px rgba(26,29,40,.025)}
+.brandmark{position:relative;isolation:isolate;overflow:hidden}
+.brandmark:after{content:"";position:absolute;inset:-55%;background:linear-gradient(115deg,transparent 35%,#ffffff66 49%,transparent 63%);transform:translateX(-70%);animation:brandSheen 7s ease-in-out infinite}
+.profile{transition:transform .22s var(--chart-ease),border-color .22s,box-shadow .22s}
+.profile:hover{transform:translateY(-1px);border-color:color-mix(in srgb,var(--purple) 24%,var(--ds-border))!important;box-shadow:var(--ds-shadow)!important}
+
+.card{isolation:isolate;overflow:hidden}
+.card>*{position:relative;z-index:1}
+.card:after{
+ content:"";position:absolute;z-index:0;inset:0;pointer-events:none;opacity:0;
+ background:radial-gradient(280px circle at var(--pointer-x,50%) var(--pointer-y,0%),var(--surface-glow),transparent 68%);
+ transition:opacity .28s ease;
+}
+.card:hover:after{opacity:1}
+.card:hover{border-color:color-mix(in srgb,var(--purple) 20%,var(--ds-border-strong))!important}
+.metric{background:linear-gradient(145deg,var(--ds-surface),color-mix(in srgb,var(--purple) 2.8%,var(--ds-surface)))!important}
+.metric-icon{width:44px!important;height:44px!important;color:var(--purple);background:color-mix(in srgb,var(--purple) 9%,var(--ds-surface))!important}
+.metric-icon .coolicon{width:21px;height:21px}
+.metric strong{font-variant-numeric:tabular-nums}
+
+.chart{gap:clamp(7px,1vw,14px)!important;padding:21px 10px 0!important;background:repeating-linear-gradient(to top,transparent 0,transparent 24%,color-mix(in srgb,var(--ds-border) 70%,transparent) 25%)}
+.bar-group{gap:5px!important}
+.bar{width:clamp(8px,1vw,13px)!important;border-radius:7px 7px 2px 2px!important;background:linear-gradient(180deg,color-mix(in srgb,var(--purple) 45%,#fff),color-mix(in srgb,var(--purple) 25%,#fff))!important;box-shadow:0 6px 12px color-mix(in srgb,var(--purple) 8%,transparent)}
+.bar.real{background:linear-gradient(180deg,color-mix(in srgb,var(--success) 84%,#fff),var(--success))!important;box-shadow:0 7px 15px color-mix(in srgb,var(--success) 17%,transparent)}
+.bar-group:hover .bar{transform:scaleX(1.22) translateY(-2px)!important;filter:saturate(1.2) brightness(1.04)}
+.bar-group label{bottom:-24px!important;font-weight:650}
+
+.evolution-chart{border-radius:12px;padding-top:4px;background:linear-gradient(180deg,color-mix(in srgb,var(--success) 2%,transparent),transparent)}
+.evolution-chart svg{overflow:visible}
+.evolution-chart line{stroke-dasharray:3 5;stroke:color-mix(in srgb,var(--ds-border-strong) 78%,transparent)}
+.line-apparent,.line-real{stroke-dasharray:1200;stroke-dashoffset:1200;animation:drawModernLine 1.45s .12s var(--chart-ease) forwards!important}
+.line-real{stroke-width:2.7!important;filter:drop-shadow(0 5px 5px color-mix(in srgb,var(--success) 20%,transparent))}
+.line-apparent{stroke-width:2!important;opacity:.72}
+.point-real{opacity:0;transform-box:fill-box;transform-origin:center;animation:modernPointIn .38s calc(.66s + var(--point-order,0)*55ms) var(--chart-ease) forwards!important}
+.point-real:hover{transform:scale(1.85)!important;filter:drop-shadow(0 0 6px color-mix(in srgb,var(--success) 55%,transparent))}
+.chart-guide{position:absolute;top:8px;bottom:24px;width:1px;pointer-events:none;opacity:0;background:linear-gradient(var(--purple),transparent);transition:left .12s linear,opacity .16s}
+.evolution-chart:hover .chart-guide{opacity:.35}
+
+.donut,.confidence-donut{filter:drop-shadow(0 12px 18px color-mix(in srgb,var(--purple) 10%,transparent));isolation:isolate}
+.donut:before,.confidence-donut:before{content:"";position:absolute;inset:-3px;border-radius:50%;border:1px solid color-mix(in srgb,var(--purple) 12%,transparent);animation:donutHalo 3.8s ease-in-out infinite;pointer-events:none}
+.donut b,.confidence-donut b{font-variant-numeric:tabular-nums;letter-spacing:-.035em}
+.legend span,.confidence-list>div{transition:transform .18s ease,color .18s ease}
+.legend span:hover,.confidence-list>div:hover{transform:translateX(3px);color:var(--ds-text)}
+
+.progress,.enemy-track,.performance-track{position:relative;overflow:hidden;background:color-mix(in srgb,var(--ds-border) 80%,transparent)!important}
+.progress i,.enemy-track i,.performance-track i{transform-origin:left;animation:modernProgress .9s calc(.1s + var(--motion-order,0)*35ms) var(--chart-ease) both!important}
+.heat{animation-delay:calc(var(--heat-order,0)*11ms)!important}
+.heat:hover{transform:translateY(-2px) scale(1.22)!important;box-shadow:0 5px 12px color-mix(in srgb,var(--purple) 24%,transparent)}
+.enemy-list>div{padding:3px 0;transition:transform .2s ease}.enemy-list>div:hover{transform:translateX(3px)}
+.enemy-track i{box-shadow:0 3px 9px color-mix(in srgb,currentColor 16%,transparent)}
+
+.tabs{box-shadow:inset 0 1px 2px rgba(22,25,35,.03)}
+.tabs button{position:relative;transition:color .2s,background .2s,transform .2s var(--chart-ease)!important}
+.tabs button:hover{color:var(--ds-text)!important}.tabs button:active{transform:scale(.97)}
+.field input,.field select,.field textarea{transition:border-color .18s,box-shadow .18s,transform .18s}
+.field input:focus,.field select:focus,.field textarea:focus{box-shadow:0 0 0 4px color-mix(in srgb,var(--purple) 10%,transparent)!important;transform:translateY(-1px)}
+button{position:relative}.button-ripple{position:absolute;border-radius:50%;pointer-events:none;background:#ffffff55;transform:translate(-50%,-50%) scale(0);animation:buttonRipple .55s ease-out forwards}
+
+body.motion-enabled .is-dynamic-visible{animation:dynamicSurfaceIn .56s calc(var(--surface-order,0)*28ms) var(--chart-ease) both}
+@keyframes dynamicSurfaceIn{from{opacity:0;transform:translateY(13px) scale(.992)}to{opacity:1;transform:none}}
+@keyframes drawModernLine{to{stroke-dashoffset:0}}
+@keyframes modernPointIn{from{opacity:0;transform:scale(.25)}to{opacity:1;transform:scale(1)}}
+@keyframes modernProgress{from{transform:scaleX(0);opacity:.35}to{transform:scaleX(1);opacity:1}}
+@keyframes donutHalo{50%{transform:scale(1.045);opacity:.35}}
+@keyframes buttonRipple{to{transform:translate(-50%,-50%) scale(1);opacity:0}}
+@keyframes brandSheen{0%,72%{transform:translateX(-70%)}88%,100%{transform:translateX(70%)}}
+
+.dark .metric{background:linear-gradient(145deg,var(--ds-surface),color-mix(in srgb,var(--purple) 5%,var(--ds-surface)))!important}
+.dark .card:after{background:radial-gradient(300px circle at var(--pointer-x,50%) var(--pointer-y,0%),color-mix(in srgb,var(--purple) 12%,transparent),transparent 70%)}
+.dark .bar{background:linear-gradient(180deg,color-mix(in srgb,var(--purple) 62%,#fff),color-mix(in srgb,var(--purple) 70%,#15161d))!important}
+
+@media(max-width:760px){.card:after{display:none}.card-head h2>.coolicon,.card-head h3>.coolicon{width:16px;height:16px}.bar{min-width:8px}.ui-icon.coolicon{width:18px;height:18px}}
+@media(prefers-reduced-motion:reduce){.brandmark:after,.donut:before,.confidence-donut:before{animation:none!important}.button-ripple{display:none}.line-apparent,.line-real,.point-real,.progress i,.enemy-track i,.performance-track i{animation:none!important;stroke-dashoffset:0;opacity:1;transform:none}}

@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "studyos-taxonomy.schema.json",
+  "title": "Estrutura de matérias do StudyOS",
+  "type": "object",
+  "required": ["categorias"],
+  "properties": {
+    "versao": { "type": "string" },
+    "categorias": {
+      "type": "array",
+      "maxItems": 200,
+      "items": {
+        "type": "object",
+        "required": ["nome", "materias"],
+        "properties": {
+          "nome": { "type": "string", "minLength": 1, "maxLength": 120 },
+          "materias": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["nome", "assuntos"],
+              "properties": {
+                "nome": { "type": "string", "minLength": 1, "maxLength": 120 },
+                "cor": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}$" },
+                "assuntos": {
+                  "type": "array",
+                  "items": { "type": "string", "minLength": 1, "maxLength": 180 }
+                }
+              },
+              "additionalProperties": true
+            }
+          }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}
