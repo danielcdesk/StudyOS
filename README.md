@@ -74,4 +74,3 @@ O artefato NSIS é gerado em `src-tauri/target/release/bundle/nsis/`.
 ## 🤝 Transparência
 
 Projeto acadêmico desenvolvido com apoio de inteligência artificial e revisão humana. Nenhum dado pessoal de integrantes, credencial ou banco real de usuário faz parte deste repositório.
-
