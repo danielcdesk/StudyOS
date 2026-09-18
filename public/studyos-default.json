@@ -1,0 +1,31 @@
+{
+  "settings": {
+    "userName": "Estudante",
+    "profilePhoto": "",
+    "palette": "violet",
+    "achievementsNotifications": true,
+    "cutoff": 70,
+    "annualGoal": 10000,
+    "exam": "ENEM",
+    "examTypes": ["ENEM", "Concurso", "Vestibular"],
+    "studyMinutes": 50,
+    "breakMinutes": 10,
+    "theme": "light"
+  },
+  "achievementsUnlocked": [],
+  "knowledgeAreas": [
+    {"id": "basicos", "name": "Conhecimentos Básicos"},
+    {"id": "especificos", "name": "Conhecimentos Específicos"}
+  ],
+  "subjects": [
+    {"id": "mat", "areaId": "basicos", "name": "Matemática", "color": "#6c5ce7", "topics": ["Funções", "Geometria", "Probabilidade"]},
+    {"id": "ling", "areaId": "basicos", "name": "Linguagens", "color": "#00a896", "topics": ["Interpretação", "Gramática", "Literatura"]},
+    {"id": "hum", "areaId": "especificos", "name": "Humanas", "color": "#f4a261", "topics": ["História", "Geografia", "Filosofia"]},
+    {"id": "nat", "areaId": "especificos", "name": "Natureza", "color": "#e76f51", "topics": ["Física", "Química", "Biologia"]}
+  ],
+  "questionSessions": [],
+  "lessons": [],
+  "exams": [],
+  "essays": [],
+  "studySessions": []
+}

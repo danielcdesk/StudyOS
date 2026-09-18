@@ -6,6 +6,16 @@ body.motion-enabled .metric:hover .metric-icon{transform:translateY(-3px) rotate
 body.motion-enabled .achievement-medal{transition:transform .22s ease,box-shadow .22s ease!important}body.motion-enabled .achievement-item:hover .achievement-medal{transform:scale(1.1) rotate(-5deg)}
 body.motion-enabled .card{transition:transform .25s ease,border-color .2s ease,box-shadow .25s ease!important}body.motion-enabled .card:hover{transform:translateY(-2px)}
 body.motion-enabled .timer-ring{animation:timerBreathe 3.4s ease-in-out infinite!important}@keyframes timerBreathe{50%{filter:drop-shadow(0 10px 20px color-mix(in srgb,var(--purple) 16%,transparent));transform:scale(1.008)}}
+body.motion-enabled .primary:not(:disabled):hover .ui-icon,body.motion-enabled .secondary:not(:disabled):hover .ui-icon{transform:translateX(2px)}
+body.motion-enabled button:not(:disabled):active{transform:scale(.975)}
+body.motion-enabled .dialog-backdrop,body.motion-enabled .achievement-backdrop{animation:motionBackdropIn .2s ease-out both}
+body.motion-enabled .study-dialog,body.motion-enabled .achievement-center{animation:motionOverlayIn .32s cubic-bezier(.16,1,.3,1) both}
+body.motion-enabled .achievement-toast.show{animation:motionToastIn .38s cubic-bezier(.16,1,.3,1) both}
+body.motion-enabled .smart-select.open .smart-select-menu{animation:motionMenuIn .22s cubic-bezier(.16,1,.3,1) both}
+@keyframes motionBackdropIn{from{opacity:0;backdrop-filter:blur(0)}to{opacity:1}}
+@keyframes motionOverlayIn{from{opacity:0;transform:translateY(12px) scale(.985)}to{opacity:1;transform:none}}
+@keyframes motionToastIn{from{opacity:0;transform:translateY(14px) scale(.97)}to{opacity:1;transform:none}}
+@keyframes motionMenuIn{from{opacity:0;transform:translateY(-5px) scale(.985)}to{opacity:1;transform:none}}
 body.motion-disabled *,body.motion-disabled *:before,body.motion-disabled *:after{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.01ms!important}
 .motion-setting{display:flex;justify-content:space-between;align-items:center;gap:20px}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto!important}body.motion-enabled *,body.motion-enabled *:before,body.motion-enabled *:after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}

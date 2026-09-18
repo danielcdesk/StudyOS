@@ -1,1 +1,68 @@
-::view-transition-old(root),::view-transition-new(root){animation-duration:.48s;animation-timing-function:cubic-bezier(.2,.75,.2,1)}::view-transition-old(root){animation-name:themeFadeOut}::view-transition-new(root){animation-name:themeReveal;mix-blend-mode:normal}@keyframes themeFadeOut{to{opacity:.72}}@keyframes themeReveal{from{clip-path:circle(0 at var(--theme-x) var(--theme-y));opacity:.75}to{clip-path:circle(150% at var(--theme-x) var(--theme-y));opacity:1}}.theme-changing,.theme-changing .sidebar,.theme-changing main,.theme-changing header,.theme-changing .card,.theme-changing button,.theme-changing input,.theme-changing select,.theme-changing textarea,.theme-changing .profile,.theme-changing .study-dialog,.theme-changing .achievement-center{transition:background-color .38s ease,color .3s ease,border-color .35s ease,box-shadow .35s ease!important}.theme-changing .ui-icon{transition:stroke .3s ease}.theme-changing .donut:after,.theme-changing .confidence-donut:after,.theme-changing .timer-ring:after{transition:background-color .38s ease}.icon-btn.switching .ui-icon{animation:themeIconSpin .48s cubic-bezier(.2,.75,.2,1)}@keyframes themeIconSpin{50%{transform:rotate(180deg) scale(.75)}to{transform:rotate(360deg) scale(1)}}@media(prefers-reduced-motion:reduce){::view-transition-old(root),::view-transition-new(root){animation:none}.icon-btn.switching .ui-icon{animation:none}}
+:root{
+ --theme-x:calc(100vw - 54px);
+ --theme-y:54px;
+ --theme-radius:150vmax;
+ --theme-ease:cubic-bezier(.16,1,.3,1);
+}
+::view-transition-group(root){animation-duration:.58s;animation-timing-function:var(--theme-ease)}
+::view-transition-image-pair(root){isolation:isolate}
+::view-transition-old(root),::view-transition-new(root){mix-blend-mode:normal;animation-fill-mode:both}
+::view-transition-old(root){z-index:1;animation:themeOldSurface .58s var(--theme-ease) both}
+::view-transition-new(root){z-index:2;animation:themeLightSweep .58s var(--theme-ease) both}
+@keyframes themeOldSurface{to{opacity:.76;filter:saturate(.88) brightness(.97);transform:scale(.996)}}
+@keyframes themeLightSweep{
+ from{clip-path:circle(0 at var(--theme-x) var(--theme-y));filter:saturate(.84) brightness(.96)}
+ to{clip-path:circle(var(--theme-radius) at var(--theme-x) var(--theme-y));filter:none}
+}
+
+/* Browsers without View Transitions still animate every meaningful layer. */
+html.theme-fallback body,
+html.theme-fallback body:before,
+html.theme-fallback .sidebar,
+html.theme-fallback main,
+html.theme-fallback main>header,
+html.theme-fallback .card,
+html.theme-fallback .metric,
+html.theme-fallback .profile,
+html.theme-fallback .tabs,
+html.theme-fallback .settings-menu,
+html.theme-fallback .settings-section,
+html.theme-fallback .study-dialog,
+html.theme-fallback .achievement-center,
+html.theme-fallback .smart-select-menu,
+html.theme-fallback button,
+html.theme-fallback input,
+html.theme-fallback select,
+html.theme-fallback textarea,
+html.theme-fallback table,
+html.theme-fallback th,
+html.theme-fallback td{
+ transition-property:background-color,color,border-color,box-shadow,fill,stroke,filter!important;
+ transition-duration:.42s!important;
+ transition-timing-function:var(--theme-ease)!important;
+}
+html.theme-fallback .donut:after,
+html.theme-fallback .confidence-donut:after,
+html.theme-fallback .timer-ring:after,
+html.theme-fallback .qb-ring:before{transition:background-color .42s var(--theme-ease)!important}
+html.theme-fallback .progress,
+html.theme-fallback .enemy-track,
+html.theme-fallback .performance-track,
+html.theme-fallback .heat,
+html.theme-fallback .gh-day{transition:background-color .42s var(--theme-ease),border-color .42s var(--theme-ease)!important}
+
+#themeBtn{isolation:isolate;overflow:visible}
+#themeBtn:before{
+ content:"";position:absolute;inset:-7px;z-index:-1;border-radius:15px;pointer-events:none;
+ background:color-mix(in srgb,var(--purple) 17%,transparent);opacity:0;transform:scale(.65)
+}
+#themeBtn.switching:before{animation:themeControlAura .58s var(--theme-ease) both}
+#themeBtn.switching .ui-icon{animation:themeIconOrbit .58s var(--theme-ease) both}
+@keyframes themeControlAura{45%{opacity:.7;transform:scale(1)}to{opacity:0;transform:scale(1.28)}}
+@keyframes themeIconOrbit{45%{opacity:.45;transform:rotate(150deg) scale(.62)}to{opacity:1;transform:rotate(360deg) scale(1)}}
+
+@media(prefers-reduced-motion:reduce){
+ ::view-transition-old(root),::view-transition-new(root){animation:none!important}
+ html.theme-fallback *,html.theme-fallback *:before,html.theme-fallback *:after{transition-duration:.01ms!important}
+ #themeBtn.switching:before,#themeBtn.switching .ui-icon{animation:none!important}
+}

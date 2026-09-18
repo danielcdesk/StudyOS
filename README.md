@@ -1,50 +1,77 @@
-# StudyOS
+# 📚 StudyOS
 
-Painel local de estudos com questões, provas, redações, aulas, Pomodoro e guia adaptativo.
+> Um workspace de estudos **offline**, privado e organizado para transformar registros em decisões de estudo.
 
-## Executar
+O StudyOS reúne planejamento, questões, aulas, provas, redações, Pomodoro e um guia adaptativo determinístico. Ele foi pensado para quem quer acompanhar a própria evolução sem conta, anúncios, telemetria, IA ou sincronização externa.
 
-No Windows, dê dois cliques em `iniciar.bat` ou execute:
+## ✨ Recursos
+
+- 📊 Painel com metas, consistência e métricas de progresso.
+- ⏱️ Pomodoro persistente, com registro automático ao concluir uma sessão de foco.
+- ✅ Banco de questões com acertos, chutes, dúvidas, pulos e dificuldade.
+- 🎬 Aulas planejadas/concluídas e histórico de duração.
+- 📝 Provas, simulados e redações com cálculos explicáveis.
+- 🧭 Guia adaptativo determinístico: prioridades baseadas apenas nos registros locais.
+- 🗂️ Categoria → matéria → assunto, vínculos por prova, reordenação e importação de estrutura.
+- 💾 Backup JSON, importação validada, prévia com contagens e opção de desfazer.
+- 🔎 Busca global navegável por teclado para páginas, matérias, assuntos, aulas e provas.
+- 🌙 Tema escuro como experiência principal, além de paletas e interface responsiva.
+
+## 🔒 Privacidade por padrão
+
+O aplicativo Windows armazena a fonte de verdade em SQLite, exclusivamente no computador:
+
+```text
+%APPDATA%\br.com.studyos.app\studyos.db
+```
+
+Backups versionados são criados na subpasta `backups`. Nenhum dado de estudo é enviado para a internet durante o uso normal. O banco, fotos e backups pessoais são ignorados pelo Git e nunca devem ser enviados ao repositório.
+
+## 🖥️ Instalação no Windows
+
+1. Baixe o instalador `.exe` da versão desejada em **Releases**.
+2. Execute o instalador e abra o **StudyOS** pelo Menu Iniciar.
+3. Na primeira utilização, vá em **Configurações → Dados e backup** e selecione o JSON do StudyOS anterior, se existir.
+4. Confira a prévia; a conversão só é executada depois da confirmação.
+
+O aplicativo inicia em uma janela própria — sem servidor Python local e sem navegador externo. O instalador usa o WebView2 do Windows; em máquinas sem ele, o próprio instalador solicita o componente necessário.
+
+## 🔄 Migração e backup
+
+- A migração preserva o JSON original e valida configurações, listas de registros e tamanho máximo de 10 MB antes de gravar no SQLite.
+- A prévia mostra categorias, matérias, assuntos, sessões, questões, aulas, provas e redações.
+- Exporte um backup JSON regularmente em **Configurações → Dados e backup**.
+- Use **Desfazer última importação** para retornar ao estado anterior no mesmo computador.
+
+## 🛠️ Desenvolvimento
+
+Pré-requisitos: Node.js, pnpm e Rust/Cargo com as ferramentas de compilação C++ do Windows.
 
 ```powershell
-python server.py
+pnpm install
+pnpm run verify
+pnpm run desktop:dev
 ```
 
-Abra http://localhost:8080. Os dados ficam somente no computador, em `data/studyos.json`.
+Para gerar o instalador:
 
-## Publicar no GitHub
-
-Este pacote já está pronto para virar um repositório. O arquivo `data/studyos.json` fica fora do Git para não publicar dados pessoais ou foto de perfil. Na primeira abertura, o StudyOS cria automaticamente uma base inicial local; `data/studyos.example.json` serve apenas como referência de estrutura.
-
-## Importação de matérias por JSON
-
-Em **Configurações → Estrutura de matérias**, o StudyOS aceita o arquivo gerado por um analisador de edital. O formato recomendado para integração é:
-
-```json
-{
-  "versao": "1.0",
-  "categorias": [
-    {
-      "nome": "Conhecimentos Básicos",
-      "materias": [
-        {
-          "nome": "Língua Portuguesa",
-          "assuntos": ["Interpretação de textos", "Gramática"]
-        }
-      ]
-    }
-  ]
-}
+```powershell
+pnpm run desktop:build
 ```
 
-Também são aceitos os nomes em inglês (`categories`, `subjects`, `topics`), uma lista plana de `materias` com o campo `categoria` e o formato nativo do StudyOS (`knowledgeAreas` e `subjects`). Nomes repetidos são unidos sem diferenciar maiúsculas, acentos ou espaços extras. Antes de importar, o usuário escolhe a prova de destino. Se ela já tiver matérias próprias, o StudyOS pede confirmação e substitui somente a estrutura vinculada àquela prova; matérias de outras provas, conteúdos comuns e históricos de questões, provas, aulas e redações são preservados. Antes da troca, o StudyOS mantém uma cópia local da estrutura anterior e de seus vínculos.
+O artefato NSIS é gerado em `src-tauri/target/release/bundle/nsis/`.
 
-O contrato formal para validação no site que analisa o edital está em `public/studyos-taxonomy.schema.json`. Campos extras são permitidos, portanto o analisador pode manter metadados próprios sem impedir a importação.
+## ✅ Qualidade
 
-Na mesma tela, as setas de cada matéria alteram sua posição dentro da categoria. A ação **Mover** transfere a matéria e todos os seus assuntos para outra categoria, preservando os registros históricos vinculados.
+`pnpm run verify` executa auditoria de renderização das telas e estados principais, validações de segurança/armazenamento local e o contrato do aplicativo desktop (SQLite, esquema versionado, migração e busca).
 
-O botão **Provas** de cada matéria e o ícone de prova de cada assunto permitem vinculá-los a um ou mais tipos de prova cadastrados pelo usuário. Sem vínculos, o conteúdo fica disponível para todas as provas. No cadastro de provas e simulados, a lista de matérias respeita automaticamente o tipo selecionado.
+## ⚠️ Limitações conhecidas
 
-A estrutura também possui uma navegação por prova. **Todas as provas** exibe a árvore completa; cada prova cadastrada abre sua própria visão com apenas as matérias gerais ou vinculadas a ela, ainda separadas pelas categorias principais. A última visão escolhida é lembrada neste computador.
+- A conversão para tabelas normalizadas por entidade ainda é uma próxima etapa: neste lançamento o SQLite armazena um documento JSON validado em uma transação, para preservar integralmente os IDs e vínculos do legado.
+- Android não faz parte deste escopo. As regras de dados e o formato de backup foram mantidos independentes da janela do Windows para facilitar uma futura adaptação.
+- Antes de distribuir uma nova versão, valide o instalador gerado em um Windows sem conexão e confirme que nenhum banco ou backup real entrou no pacote.
 
-Para encerrar com segurança, dê dois cliques em `encerrar.bat` ou pressione `Ctrl+C` no terminal do servidor.
+## 🤝 Transparência
+
+Projeto acadêmico desenvolvido com apoio de inteligência artificial e revisão humana. Nenhum dado pessoal de integrantes, credencial ou banco real de usuário faz parte deste repositório.
+

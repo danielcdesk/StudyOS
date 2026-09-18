@@ -8,13 +8,6 @@
 body.motion-enabled .ui-motion-enter{animation-name:visualSurfaceIn!important;animation-duration:.38s!important}
 @keyframes visualSurfaceIn{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
 
-/* Theme changes cross-fade as a whole; the previous circular reveal could cut
-   labels and buttons in half while the palette was changing. */
-::view-transition-old(root){animation:visualThemeOut .28s ease both!important}
-::view-transition-new(root){animation:visualThemeIn .38s ease both!important;clip-path:none!important;mix-blend-mode:normal!important}
-@keyframes visualThemeOut{to{opacity:.2}}
-@keyframes visualThemeIn{from{opacity:.28;filter:saturate(.82)}to{opacity:1;filter:none}}
-
 @media(max-width:760px){
   main>header{position:relative!important;display:block!important;min-height:104px!important;padding:7px 0 17px!important}
   main>header>div:first-child{min-width:0;padding-left:52px;padding-right:48px}

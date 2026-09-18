@@ -11,6 +11,9 @@ assert.ok(indexHtml.includes('class="skip-link"'),'atalho para o conteúdo princ
 assert.ok(indexHtml.includes('id="main-content"'),'região principal não possui destino de foco');
 assert.ok(indexHtml.includes('id="toast" role="status" aria-live="polite"'),'avisos não são anunciados por leitores de tela');
 assert.ok(indexHtml.includes('aria-controls="studySidebar"'),'menu móvel não informa qual região controla');
+assert.ok(indexHtml.includes('id="globalSearch"'),'busca global navegável ausente');
+assert.ok(indexHtml.includes('desktop-upgrades.js'),'fluxos desktop e migração não foram carregados');
+assert.ok(!indexHtml.includes('organiza-studyos.opao6394.chatgpt.site'),'aplicativo offline ainda depende de link hospedado');
 const noop=()=>{};
 const classList={add:noop,remove:noop,toggle:()=>false,contains:()=>false};
 const element={classList,style:{setProperty:noop,removeProperty:noop},dataset:{},addEventListener:noop,querySelector:()=>null,querySelectorAll:()=>[],setAttribute:noop,appendChild:noop,insertAdjacentHTML:noop};
@@ -28,7 +31,7 @@ const context=vm.createContext({
 
 const core=read('app.js').split("document.addEventListener('visibilitychange'")[0];
 vm.runInContext(core,context,{filename:'app.js'});
-const data=JSON.parse(fs.readFileSync(path.join(root,'data','studyos.json'),'utf8'));
+const data=JSON.parse(read('studyos-default.json'));
 vm.runInContext(`db=normalizeClientState(${JSON.stringify(data)})`,context);
 
 for(const name of ['exam-subjects.js','questions-ux.js','questions-gran-theme.js','question-sections.js','modern-dialogs.js','essays.js','study-now.js']){

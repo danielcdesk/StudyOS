@@ -1,0 +1,7 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "main-window",
+  "description": "Permissões mínimas para o armazenamento local do StudyOS.",
+  "windows": ["main"],
+  "permissions": ["core:default"]
+}

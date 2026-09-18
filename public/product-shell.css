@@ -1,4 +1,5 @@
 /* StudyOS product shell — one cohesive market-ready layer. */
+@import url('desktop-upgrades.css');
 :root{
   --product-canvas:#f4f6f8;
   --product-canvas-top:#fafbfc;

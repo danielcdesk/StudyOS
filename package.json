@@ -1,0 +1,15 @@
+{
+  "name": "studyos",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "test": "node tests/audit.mjs && node tests/security-audit.mjs && node tests/desktop-contract.mjs",
+    "verify": "pnpm test",
+    "desktop:dev": "tauri dev",
+    "desktop:build": "tauri build"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2.0.0"
+  }
+}

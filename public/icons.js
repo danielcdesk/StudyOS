@@ -26,9 +26,10 @@ function insertIcon(element,name){
 function refreshThemeIcon(){
  const theme=document.querySelector('#themeBtn');
  if(!theme)return;
- const name=document.body.classList.contains('dark')?'sun':'moon';
+ const dark=document.documentElement.classList.contains('dark')||document.body.classList.contains('dark');
+ const name=dark?'sun':'moon';
  if(theme.dataset.coolicon!==name){theme.innerHTML=svg(name);theme.dataset.coolicon=name}
- theme.title=document.body.classList.contains('dark')?'Ativar modo claro':'Ativar modo escuro';
+ theme.title=dark?'Ativar modo claro':'Ativar modo escuro';
  theme.setAttribute('aria-label',theme.title);
 }
 function polishIcons(root=document){
@@ -47,5 +48,7 @@ function polishIcons(root=document){
 }
 const iconObserver=new MutationObserver(changes=>{if(changes.some(change=>change.target?.matches?.('#toggleTimer,#resetTimer')||[...change.addedNodes].some(node=>node.nodeType===1)))polishIcons()});
 iconObserver.observe(document.body,{childList:true,subtree:true});
-new MutationObserver(refreshThemeIcon).observe(document.body,{attributes:true,attributeFilter:['class']});
+const themeIconObserver=new MutationObserver(refreshThemeIcon);
+themeIconObserver.observe(document.documentElement,{attributes:true,attributeFilter:['class']});
+themeIconObserver.observe(document.body,{attributes:true,attributeFilter:['class']});
 polishIcons();

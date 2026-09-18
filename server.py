@@ -81,6 +81,10 @@ class Handler(SimpleHTTPRequestHandler):
         self.send_header("X-Frame-Options", "DENY")
         self.send_header("Referrer-Policy", "no-referrer")
         self.send_header("Cross-Origin-Resource-Policy", "same-origin")
+        self.send_header("Permissions-Policy", "camera=(), microphone=(), geolocation=(), payment=(), usb=()")
+        self.send_header("Content-Security-Policy", "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'; worker-src 'self'")
+        self.send_header("Permissions-Policy", "camera=(), microphone=(), geolocation=(), payment=(), usb=()")
+        self.send_header("Content-Security-Policy", "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'; worker-src 'self'")
         super().end_headers()
     def is_local_origin(self):
         origin=self.headers.get("Origin")
@@ -99,6 +103,8 @@ class Handler(SimpleHTTPRequestHandler):
     def do_PUT(self):
         if urlparse(self.path).path != "/api/data": return self.send_json({"error":"Não encontrado"},404)
         if not self.is_local_origin(): return self.send_json({"error":"Origem não autorizada"},403)
+        if self.headers.get_content_type() != "application/json": return self.send_json({"error":"Use Content-Type application/json"},415)
+        if self.headers.get_content_type() != "application/json": return self.send_json({"error":"Envie os dados como application/json"},415)
         try:
             size=int(self.headers.get("Content-Length",0))
             if size <= 0: return self.send_json({"error":"Corpo JSON ausente"},400)
