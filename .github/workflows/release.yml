@@ -1,0 +1,49 @@
+name: 🚀 Release StudyOS
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: write
+
+jobs:
+  windows:
+    name: Build Windows release
+    runs-on: windows-latest
+
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: 📦 Enable pnpm
+        shell: pwsh
+        run: corepack enable
+
+      - name: 🔧 Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: ✅ Run verification
+        run: pnpm run verify
+
+      - name: 🪟 Build and publish Windows release
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          projectPath: .
+          tagName: ${{ github.ref_name }}
+          releaseName: "StudyOS ${{ github.ref_name }}"
+          releaseBody: |
+            Public beta do StudyOS para Windows 11.
+
+            Este aplicativo foi desenvolvido com apoio de inteligência artificial (IA), com revisão humana e testes. Consulte o README e o RELEASES.md para conhecer limitações, privacidade e checksums.
+          releaseDraft: false
+          prerelease: true
