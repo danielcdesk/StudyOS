@@ -17,7 +17,8 @@
       if(label&&!button.title) button.title=label;
     });
     const dark=root.classList.contains('dark')||body.classList.contains('dark');
-    if(themeMeta) themeMeta.content=dark?'#15171d':'#f4f6f8';
+    const preset=body.dataset.visualTheme||'classic';
+    if(themeMeta) themeMeta.content=preset==='library'?'#171411':preset==='midnight'?'#080e18':dark?'#15171d':'#f4f6f8';
   }
 
   const app=document.querySelector('#app');

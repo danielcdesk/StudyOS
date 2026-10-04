@@ -1,5 +1,4 @@
 /* StudyOS product shell — one cohesive market-ready layer. */
-@import url('desktop-upgrades.css');
 :root{
   --product-canvas:#f4f6f8;
   --product-canvas-top:#fafbfc;
@@ -111,7 +110,7 @@ main>header{
   min-height:98px;padding:12px 0 20px!important;margin-bottom:24px!important;
   background:color-mix(in srgb,var(--product-canvas) 82%,transparent)!important;
   border-color:color-mix(in srgb,var(--product-border) 74%,transparent)!important;
-  backdrop-filter:blur(20px) saturate(1.15)!important;
+  backdrop-filter:none!important;
   transition:background .24s,box-shadow .24s!important;
 }
 .page-scrolled main>header{box-shadow:0 10px 28px -28px rgba(20,26,36,.45)}
@@ -201,12 +200,18 @@ tbody tr:hover{background:color-mix(in srgb,var(--purple) 4%,var(--product-surfa
 .dark .field input,.dark .field select,.dark .field textarea,.dark .question-toolbar input,.dark .question-toolbar select{background:var(--product-surface-muted)!important}
 .dark .heat{border-color:color-mix(in srgb,var(--product-border-strong) 72%,transparent)}
 
-/* Motion with purpose */
-@keyframes productPageIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-@keyframes productMetricIn{from{opacity:0;transform:translateY(9px) scale(.985)}to{opacity:1;transform:none}}
-#app.page-ready{animation:productPageIn .34s var(--product-ease) both}
-#app.page-ready .metric{animation:productMetricIn .42s var(--product-ease) both}
-#app.page-ready .metric:nth-child(2){animation-delay:45ms}#app.page-ready .metric:nth-child(3){animation-delay:90ms}#app.page-ready .metric:nth-child(4){animation-delay:135ms}
+/* Keep navigation feedback short and avoid re-animating every dashboard tile. */
+#app.page-ready{animation:none!important}
+#app.page-ready .metric{animation:none!important}
+#app>.grid,#app>.card,#app>.tabs,#app>.section-title,#app>.settings-layout{transform:none!important}
+#app.page-ready>.grid,#app.page-ready>.card,#app.page-ready>.tabs,#app.page-ready>.section-title,#app.page-ready>.settings-layout{transition:opacity .16s ease!important;transition-delay:0s!important}
+#app .heat{animation:none!important;transition:background-color .12s ease!important}
+#app .heat:hover{transform:none!important;filter:none!important}
+#app .enemy-track i::after,#app .progress i::after{display:none!important;animation:none!important}
+body.motion-enabled .timer-ring{animation:none!important}
+body.motion-enabled .card{transition:border-color .16s ease!important}
+body.motion-enabled .card:hover{transform:none!important;box-shadow:var(--product-shadow-xs,var(--shadow))!important}
+.point-real:hover,.confidence-donut:hover{filter:none!important;transform:none!important}
 .coolicon{transition:transform .2s var(--product-ease)!important}button:hover>.coolicon{transform:scale(1.08)}
 
 @media(max-width:1180px){

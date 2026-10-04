@@ -1,10 +1,28 @@
-data/*.json
+# Dados criados no computador de cada pessoa usuária.
+data/studyos.json
+data/studyos.db
+data/studyos.db-*
+
+# Build output and dependencies for Windows and Android apps.
+Windows/node_modules/
+Windows/releases/
+Android/node_modules/
+Android/android/.gradle/
+Android/android/app/build/
+Android/releases/
+builds/Windows/*
+!builds/Windows/.gitkeep
+!builds/Windows/README.md
+builds/Android/*
+!builds/Android/.gitkeep
+!builds/Android/README.md
+
+# Arquivos temporários do Python.
 __pycache__/
 *.py[cod]
-.pytest_cache/
-work/
-outputs/
-*.log
-node_modules/
-dist/
-.wrangler/
+
+# Arquivos do sistema e de editores.
+.DS_Store
+Thumbs.db
+.vscode/
+.openai/

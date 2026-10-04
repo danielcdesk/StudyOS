@@ -1,0 +1,19 @@
+{
+  "name": "studyos-android",
+  "version": "1.0.0",
+  "private": true,
+  "description": "StudyOS para Android com conteúdo web atualizado online.",
+  "scripts": {
+    "sync": "cap sync android",
+    "build:debug": "cd android && gradlew.bat assembleDebug",
+    "build:apk": "cd android && gradlew.bat assembleDebug && cd .. && node scripts/copy-apk.mjs"
+  },
+  "dependencies": {
+    "@capacitor/android": "8.5.2",
+    "@capacitor/core": "8.5.2"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "8.5.2",
+    "typescript": "5.9.3"
+  }
+}

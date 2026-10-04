@@ -1,0 +1,25 @@
+{
+  "name": "studyos-windows",
+  "version": "1.0.0",
+  "private": true,
+  "description": "StudyOS para Windows, com atualização web automática.",
+  "main": "main.cjs",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --win nsis portable --x64"
+  },
+  "build": {
+    "appId": "com.studyos.desktop",
+    "productName": "StudyOS",
+    "directories": { "output": "../builds/Windows" },
+    "files": ["main.cjs", "package.json"],
+    "icon": "../assets/branding/studyos-icon.png",
+    "win": { "target": ["nsis", "portable"], "icon": "../assets/branding/studyos-icon.png" },
+    "nsis": { "artifactName": "StudyOS-Setup-${version}-${arch}.${ext}", "oneClick": true, "perMachine": false, "allowToChangeInstallationDirectory": false },
+    "portable": { "artifactName": "StudyOS-Portable-${version}-${arch}.${ext}" }
+  },
+  "devDependencies": {
+    "electron": "44.4.3",
+    "electron-builder": "26.15.3"
+  }
+}

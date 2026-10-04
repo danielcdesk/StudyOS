@@ -3,10 +3,13 @@ from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
 from pathlib import Path
 from urllib.parse import urlparse
 from copy import deepcopy
-import json, os, tempfile, threading, webbrowser
+import json, os, threading, webbrowser
+import sqlite3
 
 ROOT = Path(__file__).resolve().parent
-DATA = ROOT / "data" / "studyos.json"
+DATA = ROOT / "data" / "studyos.db"
+LEGACY_DATA = ROOT / "data" / "studyos.json"
+SCHEMA_VERSION = 1
 PUBLIC = ROOT / "public"
 DATA_LOCK = threading.RLock()
 MAX_BODY = 10 * 1024 * 1024
@@ -47,32 +50,76 @@ DEFAULT = {
     ]
 }
 
+def connect_db():
+    DATA.parent.mkdir(parents=True, exist_ok=True)
+    connection = sqlite3.connect(DATA, timeout=10)
+    connection.execute("PRAGMA busy_timeout = 10000")
+    connection.execute("PRAGMA journal_mode = WAL")
+    connection.execute("""
+        CREATE TABLE IF NOT EXISTS app_state (
+            id INTEGER PRIMARY KEY CHECK (id = 1),
+            schema_version INTEGER NOT NULL,
+            payload TEXT NOT NULL,
+            updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+        )
+    """)
+    connection.commit()
+    return connection
+
+
+def read_legacy_json():
+    try:
+        payload = json.loads(LEGACY_DATA.read_text(encoding="utf-8"))
+        return payload if isinstance(payload, dict) else None
+    except (json.JSONDecodeError, OSError) as exc:
+        print(f"[StudyOS] JSON legado inválido ou indisponível: {exc}")
+        return None
+
+
 def load_data():
     with DATA_LOCK:
-        if not DATA.exists():
-            DATA.parent.mkdir(parents=True, exist_ok=True)
-            save_data(deepcopy(DEFAULT))
         try:
-            payload = json.loads(DATA.read_text(encoding="utf-8"))
-            return payload if isinstance(payload, dict) else deepcopy(DEFAULT)
-        except (json.JSONDecodeError, OSError) as exc:
-            print(f"[StudyOS] Não foi possível ler os dados: {exc}")
+            connection = connect_db()
+            row = connection.execute("SELECT payload FROM app_state WHERE id = 1").fetchone()
+            if row:
+                payload = json.loads(row[0])
+                connection.close()
+                return payload if isinstance(payload, dict) else deepcopy(DEFAULT)
+
+            # Migração única: o JSON legado nunca é apagado. A cópia SQLite vira
+            # a fonte de verdade e mantém os dados existentes durante atualizações.
+            payload = read_legacy_json() or deepcopy(DEFAULT)
+            serialized = json.dumps(payload, ensure_ascii=False, separators=(",", ":"))
+            connection.execute(
+                "INSERT INTO app_state (id, schema_version, payload) VALUES (1, ?, ?)",
+                (SCHEMA_VERSION, serialized),
+            )
+            connection.commit()
+            connection.close()
+            return payload
+        except (json.JSONDecodeError, OSError, sqlite3.Error) as exc:
+            print(f"[StudyOS] Não foi possível ler o banco SQLite: {exc}")
             return deepcopy(DEFAULT)
 
 def save_data(payload):
     if not isinstance(payload, dict):
         raise ValueError("A raiz dos dados deve ser um objeto JSON.")
     with DATA_LOCK:
-        DATA.parent.mkdir(parents=True, exist_ok=True)
-        fd, tmp = tempfile.mkstemp(dir=DATA.parent, suffix=".tmp")
-        try:
-            with os.fdopen(fd, "w", encoding="utf-8") as file:
-                json.dump(payload, file, ensure_ascii=False, indent=2)
-                file.flush()
-                os.fsync(file.fileno())
-            os.replace(tmp, DATA)
-        finally:
-            if os.path.exists(tmp): os.unlink(tmp)
+        connection = connect_db()
+        serialized = json.dumps(payload, ensure_ascii=False, separators=(",", ":"))
+        connection.execute(
+            """
+            INSERT INTO app_state (id, schema_version, payload, updated_at)
+            VALUES (1, ?, ?, CURRENT_TIMESTAMP)
+            ON CONFLICT(id) DO UPDATE SET
+                schema_version = excluded.schema_version,
+                payload = excluded.payload,
+                updated_at = CURRENT_TIMESTAMP
+            """,
+            (SCHEMA_VERSION, serialized),
+        )
+        connection.commit()
+        connection.close()
 
 class Handler(SimpleHTTPRequestHandler):
     def end_headers(self):
@@ -81,10 +128,6 @@ class Handler(SimpleHTTPRequestHandler):
         self.send_header("X-Frame-Options", "DENY")
         self.send_header("Referrer-Policy", "no-referrer")
         self.send_header("Cross-Origin-Resource-Policy", "same-origin")
-        self.send_header("Permissions-Policy", "camera=(), microphone=(), geolocation=(), payment=(), usb=()")
-        self.send_header("Content-Security-Policy", "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'; worker-src 'self'")
-        self.send_header("Permissions-Policy", "camera=(), microphone=(), geolocation=(), payment=(), usb=()")
-        self.send_header("Content-Security-Policy", "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'; worker-src 'self'")
         super().end_headers()
     def is_local_origin(self):
         origin=self.headers.get("Origin")
@@ -98,20 +141,18 @@ class Handler(SimpleHTTPRequestHandler):
     def do_GET(self):
         path=urlparse(self.path).path
         if path == "/api/data": return self.send_json(load_data())
-        if path == "/health": return self.send_json({"ok":True,"app":"StudyOS"})
+        if path == "/health": return self.send_json({"ok":True,"app":"StudyOS","storage":"sqlite","schemaVersion":SCHEMA_VERSION})
         return super().do_GET()
     def do_PUT(self):
         if urlparse(self.path).path != "/api/data": return self.send_json({"error":"Não encontrado"},404)
         if not self.is_local_origin(): return self.send_json({"error":"Origem não autorizada"},403)
-        if self.headers.get_content_type() != "application/json": return self.send_json({"error":"Use Content-Type application/json"},415)
-        if self.headers.get_content_type() != "application/json": return self.send_json({"error":"Envie os dados como application/json"},415)
         try:
             size=int(self.headers.get("Content-Length",0))
             if size <= 0: return self.send_json({"error":"Corpo JSON ausente"},400)
             if size > MAX_BODY: return self.send_json({"error":"Backup maior que 10 MB"},413)
             payload=json.loads(self.rfile.read(size))
             save_data(payload); self.send_json({"ok":True})
-        except (json.JSONDecodeError, UnicodeDecodeError, ValueError, OSError) as exc: self.send_json({"error":str(exc)},400)
+        except (json.JSONDecodeError, UnicodeDecodeError, ValueError, OSError, sqlite3.Error) as exc: self.send_json({"error":str(exc)},400)
     def do_POST(self):
         if urlparse(self.path).path != "/api/shutdown": return self.send_json({"error":"Não encontrado"},404)
         if not self.is_local_origin(): return self.send_json({"error":"Origem não autorizada"},403)

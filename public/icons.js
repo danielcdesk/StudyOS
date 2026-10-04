@@ -26,11 +26,14 @@ function insertIcon(element,name){
 function refreshThemeIcon(){
  const theme=document.querySelector('#themeBtn');
  if(!theme)return;
+ const visualTheme=document.body.dataset.visualTheme||'classic';
  const dark=document.documentElement.classList.contains('dark')||document.body.classList.contains('dark');
  const name=dark?'sun':'moon';
  if(theme.dataset.coolicon!==name){theme.innerHTML=svg(name);theme.dataset.coolicon=name}
- theme.title=dark?'Ativar modo claro':'Ativar modo escuro';
+ const themeNames={library:'Biblioteca',midnight:'Meia-noite'};
+ theme.title=visualTheme==='classic'?(dark?'Ativar modo claro':'Ativar modo escuro'):`Voltar ao tema Clássico a partir de ${themeNames[visualTheme]||'outro tema escuro'}`;
  theme.setAttribute('aria-label',theme.title);
+ theme.setAttribute('aria-pressed',String(dark));
 }
 function polishIcons(root=document){
  const navMap={dashboard:'dashboard',study:'study',questions:'questions',lessons:'lessons',exams:'exams',essays:'essays',guide:'guide',settings:'settings'};
@@ -48,7 +51,5 @@ function polishIcons(root=document){
 }
 const iconObserver=new MutationObserver(changes=>{if(changes.some(change=>change.target?.matches?.('#toggleTimer,#resetTimer')||[...change.addedNodes].some(node=>node.nodeType===1)))polishIcons()});
 iconObserver.observe(document.body,{childList:true,subtree:true});
-const themeIconObserver=new MutationObserver(refreshThemeIcon);
-themeIconObserver.observe(document.documentElement,{attributes:true,attributeFilter:['class']});
-themeIconObserver.observe(document.body,{attributes:true,attributeFilter:['class']});
+new MutationObserver(refreshThemeIcon).observe(document.body,{attributes:true,attributeFilter:['class']});
 polishIcons();

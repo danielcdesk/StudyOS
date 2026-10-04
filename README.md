@@ -1,121 +1,67 @@
-# 📚 StudyOS
+# StudyOS
 
-> Seu workspace de estudos para planejar melhor, estudar com foco e transformar registros em decisões.
+Aplicativo de estudos com questões, provas, redações, aulas, Pomodoro e guia adaptativo.
 
-[![Status](https://img.shields.io/badge/status-public%20beta-6d5ce7?style=flat-square)](https://github.com/danielcdesk/StudyOS/releases)
-[![Windows 11](https://img.shields.io/badge/Windows%2011-supported-2563eb?style=flat-square&logo=windows)](https://github.com/danielcdesk/StudyOS/releases)
-[![Android](https://img.shields.io/badge/Android-APK%20experimental-3ddc84?style=flat-square&logo=android)](https://github.com/danielcdesk/StudyOS/releases)
-[![Feito com IA](https://img.shields.io/badge/feito%20com-IA-8b5cf6?style=flat-square)](#-transparência)
+## Aplicativos prontos
 
-O **StudyOS** organiza o ciclo completo de estudo em um só lugar: planejamento, foco, questões, aulas, provas, redações e revisão. O projeto é local-first, responsivo e pode ser usado pelo navegador ou em uma janela própria no Windows.
+- **Windows 11:** instalador e versão portátil em `builds/Windows/`.
+- **Android:** APK de teste em `builds/Android/StudyOS-Android.apk`.
 
-🔗 **Demo online:** [studyos-luiz-2026.opao6394.chatgpt.site](https://studyos-luiz-2026.opao6394.chatgpt.site/)
+Os aplicativos instalados abrem o StudyOS pelo endereço HTTPS oficial. Não precisam de Python, `localhost` nem dos arquivos `.bat`. Conecte-se à internet na primeira abertura; o cache permite reutilizar a última versão carregada quando estiver offline.
 
-## ✨ O que já existe
+## Atualizações e dados
 
-- 📊 **Visão geral** com metas, consistência, evolução e indicadores de domínio.
-- 🎯 **Estude agora** para iniciar uma sessão de foco e registrar o que foi feito.
-- ✅ **Banco de questões** com acertos, erros, dúvidas, chutes e questões puladas.
-- 🎬 **Aulas** planejadas e concluídas, com histórico de duração.
-- 📝 **Provas e redações** com métricas explicáveis.
-- 🧭 **Guia de estudos** com prioridades calculadas a partir dos seus próprios registros.
-- 🗂️ **Estrutura de matérias** por categoria, matéria e assunto.
-- ⏱️ **Pomodoro persistente** e registro de tempo de foco.
-- 💾 **Backup JSON** com prévia, validação e opção de desfazer a última importação.
-- 🌗 **Temas e paletas** para adaptar o ambiente ao seu jeito de estudar.
-- 🔒 **Privacidade por padrão:** os dados de estudo ficam no dispositivo durante o uso normal.
+Atualizações da interface e correções publicadas no site chegam ao abrir o aplicativo conectado, sem reinstalar o APK ou o programa do Windows. Mudanças no invólucro nativo (por exemplo, permissões ou integração com o sistema) ainda precisam de um novo pacote.
 
-## 🖼️ Prévia do aplicativo
+Os dados ficam locais em cada dispositivo e não são sincronizados entre Windows e Android. Para transferi-los, use **Configurações → Dados e backup → Exportar JSON** e importe o arquivo no outro dispositivo.
 
-As imagens abaixo foram capturadas da versão pública do StudyOS e mostram o painel principal e a área de configurações.
+O banco antigo do servidor local (`data/studyos.json`) foi preservado, mas os novos apps não o leem diretamente. Para levar esses registros, abra a versão local, exporte um JSON em **Configurações → Dados e backup** e importe-o no novo app.
 
-| Visão geral | Configurações |
-| --- | --- |
-| ![Painel principal do StudyOS](docs/screenshots/dashboard.png) | ![Configurações do StudyOS](docs/screenshots/settings.png) |
+## Desenvolvimento local
 
-## 📦 Downloads e releases
-
-Os instaladores e o APK ficam na página de [**Releases**](https://github.com/danielcdesk/StudyOS/releases).
-
-| Plataforma | Arquivo | Uso |
-| --- | --- | --- |
-| 🪟 Windows 11 | `StudyOS Setup 1.0.0.exe` | Instalador recomendado |
-| 🪟 Windows 11 | `StudyOS 1.0.0.exe` | Versão portátil |
-| 📱 Android | `StudyOS-Android.apk` | APK experimental para testes |
-
-> ⚠️ O APK experimental carrega a mesma experiência web publicada. Para instalar no Android, habilite a instalação de apps de fontes permitidas e confira a origem do arquivo antes de abrir.
-
-### Atualizações sem reinstalar
-
-A interface é carregada a partir da versão web publicada. Assim, correções visuais e melhorias do front-end podem chegar automaticamente na próxima abertura do app. Alterações no invólucro nativo — permissões, ícone, janela ou ponte Android/Windows — exigem uma nova build e um novo release.
-
-Consulte o [histórico de releases](RELEASES.md) para ver o que mudou e conferir os hashes SHA-256 dos artefatos.
-
-## 🔒 Privacidade e dados
-
-- O StudyOS não exige conta para registrar seus estudos.
-- O banco local do aplicativo Windows fica em:
-
-  ```text
-  %APPDATA%\\br.com.studyos.app\\studyos.db
-  ```
-
-- Backups pessoais e bancos reais não devem ser enviados para o GitHub.
-- Exporte um backup JSON em **Configurações → Dados e backup** antes de trocar de dispositivo.
-
-## 🛠️ Desenvolvimento local
-
-Pré-requisitos: Node.js, pnpm e, para o desktop, Rust/Cargo com as ferramentas de compilação C++ do Windows.
+O servidor Python e os scripts em `Windows/legacy/` foram mantidos somente para desenvolvimento/testes locais; não são usados pelos aplicativos instalados. Para iniciar o servidor manualmente:
 
 ```powershell
-pnpm install
-pnpm run verify
-pnpm run desktop:dev
+python server.py
 ```
 
-Para gerar o instalador Windows:
+Abra `http://localhost:8080`. No modo local, os dados ficam em `data/studyos.json` e uma cópia é mantida no navegador.
 
-```powershell
-pnpm run desktop:build
+Para gerar os pacotes, consulte os READMEs em `Windows/` e `Android/`. As saídas ficam sempre centralizadas em `builds/`, separadas por plataforma.
+
+## Publicar no GitHub
+
+Este pacote já está pronto para virar um repositório. O arquivo `data/studyos.json` fica fora do Git para não publicar dados pessoais ou foto de perfil. Na primeira abertura, o StudyOS cria automaticamente uma base inicial local; `data/studyos.example.json` serve apenas como referência de estrutura.
+
+## Importação de matérias por JSON
+
+Em **Configurações → Estrutura de matérias**, o StudyOS aceita o arquivo gerado por um analisador de edital. O formato recomendado para integração é:
+
+```json
+{
+  "versao": "1.0",
+  "categorias": [
+    {
+      "nome": "Conhecimentos Básicos",
+      "materias": [
+        {
+          "nome": "Língua Portuguesa",
+          "assuntos": ["Interpretação de textos", "Gramática"]
+        }
+      ]
+    }
+  ]
+}
 ```
 
-O artefato Tauri é gerado em `src-tauri/target/release/bundle/`.
+Também são aceitos os nomes em inglês (`categories`, `subjects`, `topics`), uma lista plana de `materias` com o campo `categoria` e o formato nativo do StudyOS (`knowledgeAreas` e `subjects`). Nomes repetidos são unidos sem diferenciar maiúsculas, acentos ou espaços extras. Antes de importar, o usuário escolhe a prova de destino. Se ela já tiver matérias próprias, o StudyOS pede confirmação e substitui somente a estrutura vinculada àquela prova; matérias de outras provas, conteúdos comuns e históricos de questões, provas, aulas e redações são preservados. Antes da troca, o StudyOS mantém uma cópia local da estrutura anterior e de seus vínculos.
 
-## ✅ Qualidade
+O contrato formal para validação no site que analisa o edital está em `public/studyos-taxonomy.schema.json`. Campos extras são permitidos, portanto o analisador pode manter metadados próprios sem impedir a importação.
 
-```powershell
-pnpm run verify
-```
+Na mesma tela, as setas de cada matéria alteram sua posição dentro da categoria. A ação **Mover** transfere a matéria e todos os seus assuntos para outra categoria, preservando os registros históricos vinculados.
 
-O comando executa a auditoria das telas, estados principais, armazenamento local, migração, busca e contrato do desktop. Antes de distribuir uma build, teste o instalador em um Windows limpo e confirme que nenhum dado pessoal entrou no pacote.
+O botão **Provas** de cada matéria e o ícone de prova de cada assunto permitem vinculá-los a um ou mais tipos de prova cadastrados pelo usuário. Sem vínculos, o conteúdo fica disponível para todas as provas. No cadastro de provas e simulados, a lista de matérias respeita automaticamente o tipo selecionado.
 
-## 🧩 Estrutura do projeto
+A estrutura também possui uma navegação por prova. **Todas as provas** exibe a árvore completa; cada prova cadastrada abre sua própria visão com apenas as matérias gerais ou vinculadas a ela, ainda separadas pelas categorias principais. A última visão escolhida é lembrada neste computador.
 
-```text
-StudyOS/
-├─ public/             # Interface web, temas, componentes e dados de exemplo
-├─ src-tauri/          # Aplicativo Windows desktop (Tauri + SQLite)
-├─ data/               # Exemplos seguros para desenvolvimento
-├─ tests/              # Auditorias automatizadas
-├─ RELEASES.md         # Registro de versões e checksums
-└─ README.md           # Este documento
-```
-
-## 🤝 Como contribuir
-
-1. Faça um fork do projeto.
-2. Crie uma branch curta para sua alteração.
-3. Rode `pnpm run verify`.
-4. Abra um pull request descrevendo o problema, a solução e como você testou.
-
-Issues e sugestões são bem-vindas, principalmente quando incluem passos para reproduzir o problema e capturas sem dados pessoais.
-
-## 🧠 Transparência
-
-Este aplicativo foi desenvolvido com apoio de **inteligência artificial (IA)**, com revisão humana, decisões técnicas humanas e testes antes da distribuição. A IA participou da exploração de ideias, implementação e documentação; ela não substitui revisão, validação de segurança ou responsabilidade sobre o uso do software.
-
-O StudyOS é um projeto experimental/educacional. Faça backups dos seus dados e valide qualquer informação importante antes de tomar decisões acadêmicas.
-
-## 📄 Licença
-
-Ainda não há uma licença de código aberto definida para este repositório. Até que uma licença seja adicionada, todos os direitos permanecem reservados ao autor.
+Para encerrar o servidor de desenvolvimento local, pressione `Ctrl+C` no terminal onde ele foi iniciado.
